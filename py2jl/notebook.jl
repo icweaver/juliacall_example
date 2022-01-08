@@ -59,8 +59,8 @@ md"""
 # Define a 🌳 search
 knn_py(data, query; k=3) = sp.KDTree(data).query(query, k=k)
 
-# ╔═╡ c0131885-2302-413c-96bf-ef878155f36c
-t_py = @benchmark knn_py($(data'), $query)
+# ╔═╡ 4078c058-a20a-4943-9bb9-2adf6fbca4ea
+t_py = @benchmark $knn_py($(data'), $query)
 
 # ╔═╡ 53320eac-f2ab-4620-8b16-1d0dbf9f84e1
 md"""
@@ -74,20 +74,20 @@ md"""
 """
 
 # ╔═╡ aac55d6e-3f94-4c44-b2cd-f5e83866388b
-knn_py_precomputed(tree, query; k=3) = tree.query(query, k=k)
+knn_precomputed_py(tree, query; k=3) = tree.query(query, k=k)
 
-# ╔═╡ 1bffa349-63d4-4a5d-8306-0870ddd283a1
+# ╔═╡ a117c9cd-9fbd-437c-975e-3dabd17e79d4
 tree_py = sp.KDTree(data')
 
-# ╔═╡ b97f360c-480e-4ee0-aed2-9a1c4f8faa24
-t_py_precomputed = @benchmark knn_py_precomputed($tree_py, $query)
+# ╔═╡ 63766e85-c6ff-4355-bce9-96d91a687898
+t_precomputed_py = @benchmark $knn_precomputed_py($tree_py, $query)
 
 # ╔═╡ 7a1fd302-9c3a-453b-adf9-e4f561c4031e
 x_faster(a, b) = round(median(a.times) / median(b.times), digits=2)
 
 # ╔═╡ 68dc277c-907d-4d4b-9eb1-44a4d1788baf
 md"""
-🔹 This is about **$(x_faster(t_py, t_py_precomputed)) x** faster now, but it's still slower than the best native Python solution we have in the other notebook. Let's try it in Julia.
+🔹 This is about **$(x_faster(t_py, t_precomputed_py)) x** faster now, but it's still slower than the best native Python solution we have in the [other notebook](https://nbviewer.org/github/icweaver/juliacall_example/blob/main/jl2py/notebook.ipynb?flush_cache=true#python-version). Let's try it in Julia.
 """
 
 # ╔═╡ db2f9891-cb13-4739-bbf8-8b92b60ae81f
@@ -100,26 +100,28 @@ md"""
 # ╔═╡ 7b27714f-f59e-4f4e-87ea-3040eea74d01
 knn_jl(data, query; k=3) = knn(KDTree(data), query, k, true)
 
-# ╔═╡ deb43ecf-0540-4af8-9c4f-feb0c671c47d
-t_jl = @benchmark knn_jl($data, $query)
+# ╔═╡ b69b4fbd-ae2e-4b77-bbd7-e5689b0a6303
+t_jl = @benchmark $knn_jl($data, $query)
 
 # ╔═╡ 1dee6ecd-4aa7-40d2-92a6-d4cf85ac1d66
 md"""
-🔹 This is already **$(x_faster(t_py, t_jl))x** faster than the first Python version (`t_py`). It's also faster than its native Python equivalent! To wrap up the comparisons, let's check out the precomputed version:
+🔹 This is already **$(x_faster(t_py, t_jl))x** faster than the first Python version (`t_py`). For this run, it's also faster than its native Python equivalent! To wrap up the comparisons, let's check out the precomputed version:
 """
 
 # ╔═╡ 00a66ccc-82e3-4865-83fa-585c2fb62f1b
-tree_jl = KDTree(data)
+tree_jl = KDTree(2*data)
 
-# ╔═╡ 362c2be6-9dbd-4465-805f-8194d3afded2
+# ╔═╡ 6cb59503-f5c1-4972-aa9c-c3a7f15cec67
 knn_precomputed_jl(tree, data, query; k=3) = knn(tree, query, k, true)
 
-# ╔═╡ 3e3d634a-fcd4-42f8-9aa0-4c1b07e27fa2
-t_jl_precomputed = @benchmark knn_precomputed_jl($tree_jl, $data, $query)
+# ╔═╡ 32ac3e4e-68a5-40aa-bd1a-8654fae064ad
+t_precomputed_jl = @benchmark $knn_precomputed_jl($tree_jl, $data, $query)
 
 # ╔═╡ a2ed5cd3-67ca-4321-9360-bff45afaa26a
 md"""
-🔹 This is $(x_faster(t_py, t_jl_precomputed))x faster than the original Python version 🔥
+🔹 This is $(x_faster(t_py, t_precomputed_jl))x faster than the original Python version 🔥
+
+Although, tbf, this is comparing a (slightly) optimized native solution vs. a non-native and un-optimized Python solution.
 """
 
 # ╔═╡ ef51513a-9e37-47ec-9476-6b0722aeb4c3
@@ -136,10 +138,10 @@ md"""
 """
 
 # ╔═╡ 032247e6-484c-47cc-af44-ec33291b90d9
-labels = ["t_py", "t_py_precomp", "t_jl", "t_jl_precomp"]
+labels = ["t_py", "t_jl", "t_precomp_py", "t_precomp_jl"]
 
 # ╔═╡ cdb4c600-d6b3-4984-b344-9dc6c328d5b0
-times = (t_py, t_jl, t_py_precomputed, t_jl_precomputed);
+times = (t_py, t_jl, t_precomputed_py, t_precomputed_jl);
 
 # ╔═╡ ef420307-fb1f-48fc-bc9d-66217f001d60
 times_report = map(Iterators.product(times, times)) do t
@@ -148,6 +150,25 @@ end;
 
 # ╔═╡ 65c4aed6-fcf2-4d46-923e-296a9b85df33
 @with_terminal println(NamedArray(times_report, (labels, labels), ("this", "vs.")))
+
+# ╔═╡ a2fc6854-08f7-4863-b20e-ca7af6dfa191
+html"""
+<style>
+#launch_binder {
+	display: none;
+}
+body.disable_ui main {
+		max-width : 95%;
+	}
+@media screen and (min-width: 1081px) {
+	body.disable_ui main {
+		margin-left : 10px;
+		max-width : 72%;
+		align-self: flex-start;
+	}
+}
+</style>
+"""
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -556,21 +577,21 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─aeb83261-1055-4ae5-85ad-e4eb0623def9
 # ╠═0b075caa-54cf-45fa-b048-9fb87d6893de
 # ╠═ab2093a8-79e8-4416-9451-0c22786bfae5
-# ╠═c0131885-2302-413c-96bf-ef878155f36c
+# ╠═4078c058-a20a-4943-9bb9-2adf6fbca4ea
 # ╟─53320eac-f2ab-4620-8b16-1d0dbf9f84e1
 # ╟─f026d776-7ab8-49f1-9722-afc44f903ab6
 # ╠═aac55d6e-3f94-4c44-b2cd-f5e83866388b
-# ╠═1bffa349-63d4-4a5d-8306-0870ddd283a1
-# ╠═b97f360c-480e-4ee0-aed2-9a1c4f8faa24
+# ╠═a117c9cd-9fbd-437c-975e-3dabd17e79d4
+# ╠═63766e85-c6ff-4355-bce9-96d91a687898
 # ╠═7a1fd302-9c3a-453b-adf9-e4f561c4031e
 # ╟─68dc277c-907d-4d4b-9eb1-44a4d1788baf
 # ╟─db2f9891-cb13-4739-bbf8-8b92b60ae81f
 # ╠═7b27714f-f59e-4f4e-87ea-3040eea74d01
-# ╠═deb43ecf-0540-4af8-9c4f-feb0c671c47d
+# ╠═b69b4fbd-ae2e-4b77-bbd7-e5689b0a6303
 # ╟─1dee6ecd-4aa7-40d2-92a6-d4cf85ac1d66
 # ╠═00a66ccc-82e3-4865-83fa-585c2fb62f1b
-# ╠═362c2be6-9dbd-4465-805f-8194d3afded2
-# ╠═3e3d634a-fcd4-42f8-9aa0-4c1b07e27fa2
+# ╠═6cb59503-f5c1-4972-aa9c-c3a7f15cec67
+# ╠═32ac3e4e-68a5-40aa-bd1a-8654fae064ad
 # ╟─a2ed5cd3-67ca-4321-9360-bff45afaa26a
 # ╟─ef51513a-9e37-47ec-9476-6b0722aeb4c3
 # ╟─65c4aed6-fcf2-4d46-923e-296a9b85df33
@@ -579,5 +600,6 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─cdb4c600-d6b3-4984-b344-9dc6c328d5b0
 # ╟─ef420307-fb1f-48fc-bc9d-66217f001d60
 # ╟─ea71d315-5dde-4bef-afc5-5b621f8a1d5d
+# ╟─a2fc6854-08f7-4863-b20e-ca7af6dfa191
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002

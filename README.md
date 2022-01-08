@@ -47,7 +47,7 @@ python> x
 ```
 
 Check out this
-[notebook](https://nbviewer.org/github/icweaver/juliacall_example/blob/main/notebook.ipynb?flush_cache=true) for an
+[notebook](https://nbviewer.org/github/icweaver/juliacall_example/blob/main/jl2py/notebook.ipynb?flush_cache=true) for an
 example of how to start using Julia packages in a Python workflow.
 
 # If you want to run Python from Julia
