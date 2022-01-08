@@ -9,6 +9,9 @@ license = "MIT"
 python = ">=3.9,<3.11"
 juliacall = "^0.4.3"
 notebook = "^6.4.6"
+numpy = "^1.22.0"
+scipy = "^1.7.3"
+julia = "^0.5.7"
 
 [tool.poetry.dev-dependencies]
 

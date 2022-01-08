@@ -1,0 +1,8 @@
+[deps]
+DifferentialEquations = "0c46a032-eb83-5123-abaf-570d42b7fbaa"
+NearestNeighbors = "b8a86587-4115-5ab1-83bc-aa920d37bbce"
+Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
+PythonCall = "6099a3de-0909-46bc-b1f4-468b9a2dfc0d"
+
+[compat]
+PythonCall = "= 0.4.3"

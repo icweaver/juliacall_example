@@ -1,7 +1,9 @@
+# If you want to run Julia from Python
 1. Set up a Python env:
 
 ```shell
-> conda create --prefix ./envs python=3; conda activate ./envs
+> cd py2jl/
+> conda create --prefix envs python=3; conda activate envs
 ```
 
 I'm setting it up in the same dir as this project because `juliacall` will automatically store the Julia environment
@@ -21,6 +23,7 @@ python> from juliacall import Main as jl
    do this directly from your Python shell, but using the Julia package manager directly is just so satisfying):
 
 ```shell
+> cp Project.toml envs/julia_env/ # *
 > cd envs/julia_env/
 > julia --project=.
 > ] # Entering this key puts us into "package manager" mode
@@ -30,11 +33,8 @@ python> from juliacall import Main as jl
 (julia_env) pkg> add <your julia packages here>
 ```
 
-Similarly to `poetry`, you can skip this last step if you already have Julia packages specified (which this example repo
-does in the Project.toml in the same directory), as seen by the output from the package manager after running `up`.
-```shell
-(julia_env) pkg> instantiate # or `up`, either way
-```
+\* Similarly to `poetry`, you can skip this last step of manually adding packages if you already have your Julia packages
+specified. This is given by the Project.toml, which we copied into this env for this repo.
 
 5. Back in your Python shell, start calling some Julia code!
 ```python
@@ -46,6 +46,10 @@ python> x
  0.751745  0.270303  0.282827  0.297428
 ```
 
-Check out the
+Check out this
 [notebook](https://nbviewer.org/github/icweaver/juliacall_example/blob/main/notebook.ipynb?flush_cache=true) for an
 example using some Julia packages
+
+# If you want to run Python from Julia
+1. Download this notebook (preview)
+2. That's it
