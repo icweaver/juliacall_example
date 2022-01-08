@@ -1,7 +1,7 @@
 1. Set up a Python env:
 
-```
-conda create --prefix ./envs python=3; conda activate ./envs
+```shell
+> conda create --prefix ./envs python=3; conda activate ./envs
 ```
 
 I'm setting it up in the same dir as this project because `juliacall` will automatically store the Julia environment
