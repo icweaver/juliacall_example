@@ -51,5 +51,7 @@ Check out this
 example of how to start using Julia packages in a Python workflow.
 
 # If you want to run Python from Julia
-1. Download this notebook (preview)
-2. That's it
+1. Open [this notebook](https://icweaver.github.io/juliacall_example/py2jl/notebook.jl.html)
+2. Click on "Edit or run this notebook" in the top right
+3. Follow the instructions to download and open the notebook with [Pluto.jl](https://github.com/fonsp/Pluto.jl)
+4. That's it

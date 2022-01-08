@@ -154,7 +154,7 @@ end;
 # ╔═╡ a2fc6854-08f7-4863-b20e-ca7af6dfa191
 html"""
 <style>
-#launch_binder {
+launch_binder {
 	display: none;
 }
 body.disable_ui main {
