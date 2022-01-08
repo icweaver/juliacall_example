@@ -8,7 +8,7 @@ I'm setting it up in the same dir as this project because `juliacall` will autom
 inside of it for us in the next step, and it's nice having everything be in one place:
 
 2. Install `juliacall`:
-```
+```shell
 > poetry install # `poetry add <packages...>` if doing it for the first time
 ```
 
