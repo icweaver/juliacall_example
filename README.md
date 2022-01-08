@@ -2,7 +2,7 @@
 1. Set up a Python env:
 
 ```shell
-> cd py2jl/
+> cd jl2py/
 > conda create --prefix envs python=3; conda activate envs
 ```
 
@@ -11,7 +11,7 @@ inside of it for us in the next step, and it's nice having everything be in one 
 
 2. Install `juliacall`:
 ```shell
-> poetry install # `poetry add <packages...>` if doing it for the first time
+> poetry install
 ```
 
 3. Fire up a Python shell and create the local Julia environment:
@@ -23,7 +23,7 @@ python> from juliacall import Main as jl
    do this directly from your Python shell, but using the Julia package manager directly is just so satisfying):
 
 ```shell
-> cp Project.toml envs/julia_env/ # *
+> cp Project.toml envs/julia_env/
 > cd envs/julia_env/
 > julia --project=.
 > ] # Entering this key puts us into "package manager" mode
@@ -33,7 +33,7 @@ python> from juliacall import Main as jl
 (julia_env) pkg> add <your julia packages here>
 ```
 
-\* Similarly to `poetry`, you can skip this last step of manually adding packages if you already have your Julia packages
+Similarly to `poetry`, you can skip this last step of manually adding packages if you already have your Julia packages
 specified. This is given by the Project.toml, which we copied into this env for this repo.
 
 5. Back in your Python shell, start calling some Julia code!
@@ -48,7 +48,7 @@ python> x
 
 Check out this
 [notebook](https://nbviewer.org/github/icweaver/juliacall_example/blob/main/notebook.ipynb?flush_cache=true) for an
-example using some Julia packages
+example of how to start using Julia packages in a Python workflow.
 
 # If you want to run Python from Julia
 1. Download this notebook (preview)
